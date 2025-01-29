@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tender Submission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .tender-id-group {
+            display: flex;
+            gap: 10px;
+        }
+        .remove-btn {
+            background-color: red;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Submit Tender Details</h2>
+        <form id="tenderForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="bidderName">Bidder Name:</label>
+            <input type="text" id="bidderName" name="bidderName" required>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" required>
+
+            <label for="division">Division:</label>
+            <input type="text" id="division" name="division" required>
+
+            <label for="tenderId">Tender ID(s):</label>
+            <div id="tenderIds">
+                <div class="tender-id-group">
+                    <input type="text" name="tenderId[]" required>
+                    <button type="button" class="remove-btn" onclick="removeTenderId(this)">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addTenderId()">+ Add More Tender ID</button>
+
+            <label for="totalTenders">Total No of Tenders:</label>
+            <input type="number" id="totalTenders" name="totalTenders" required>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function addTenderId() {
+            const tenderIdsDiv = document.getElementById('tenderIds');
+            const newInputDiv = document.createElement('div');
+            newInputDiv.className = 'tender-id-group';
+            newInputDiv.innerHTML = '<input type="text" name="tenderId[]" required> <button type="button" class="remove-btn" onclick="removeTenderId(this)">X</button>';
+            tenderIdsDiv.appendChild(newInputDiv);
+        }
+
+        function removeTenderId(button) {
+            button.parentElement.remove();
+        }
+
+        document.getElementById('tenderForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key === 'tenderId[]') {
+                    data[key] = data[key] || [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            try {
+                const response = await fetch(https://script.google.com/macros/s/AKfycbzS1RIKnul598wvsEX_AgFNnEvs0gbs7ImMAFil1vfbifK7P1IkpZTk-1mnnoMqZ5XyLg/exec, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Data submitted successfully!');
+                    this.reset();
+                } else {
+                    alert('Submission failed!');
+                }
+            } catch (error) {
+                alert('Error submitting form');
+            }
+        });
+    </script>
+</body>
+</html>
